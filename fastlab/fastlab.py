@@ -73,21 +73,15 @@ async def make_image(request: Request):
     im = Image.fromarray(image, mode="RGB")
     im.save(f"./static/{image_n}")
 # передаем в шаблон две переменные, к которым сохранили url
-    return templates.TemplateResponse("image.html",
-                                      {"request": request, "im_st": image_st,
-                                          "im_dyn": image_dyn})
+    return templates.TemplateResponse("image.html", {"request": request,
+                                                     "im_st": image_st,
+                                                     "im_dyn": image_dyn})
 
 
 @app.post("/image_form", response_class=HTMLResponse)
-async def make_image(request: Request,
-                     name_op: str = Form(),
-                     number_op: int = Form(),
-                     r: int = Form(),
-                     g: int = Form(),
-                     b: int = Form(),
-                     files: List[UploadFile] = File(
-                         description="Multiple files as UploadFile")
-                     ):
+async def make_image(request: Request, name_op: str = Form(), number_op: int = Form(),
+                     r: int = Form(), g: int = Form(), b: int = Form(), files: List[UploadFile] = File(
+                         description="Multiple files as UploadFile")):
     # устанавливаем готовность прорисовки файлов, можно здесь про-
     # верить, что файлы вообще есть
     # лучше использовать исключения
@@ -100,9 +94,8 @@ async def make_image(request: Request,
     if ready:
         print([file.filename.encode('utf-8') for file in files])
 # преобразуем имена файлов в хеш -строку
-        images = [
-            "static/"+hashlib.sha256(file.filename.encode('utf-8')).hexdigest()
-            for file in files]
+        images = ["static/"+hashlib.sha256(
+            file.filename.encode('utf-8')).hexdigest()+".jpg" for file in files]
 # берем содержимое файлов
         content = [await file.read() for file in files]
 # создаем объекты Image типа RGB размером 200 на 200
@@ -119,11 +112,11 @@ async def make_image(request: Request,
 # рые позже будут
 # извлечены браузером запросами get по указанным ссылкам в img
 # src
-        return templates.TemplateResponse("forms.html", {"request": request,
-                                                         "ready": ready,
-                                                         "images": images})
+    return templates.TemplateResponse("forms.html", {"request": request,
+                                                     "ready": ready,
+                                                     "images": images})
 
 
 @app.get("/image_form", response_class=HTMLResponse)
-async def make_image(request: Request):
+def make_image(request: Request):
     return templates.TemplateResponse("forms.html", {"request": request})
