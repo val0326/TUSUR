@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Transform images</title>
+</head>
+
+<body>
+    <h2>Форма ввода данных для изображений</h2>
+    <form action="transform" enctype="multipart/form-data" method="post">
+        <label for="directions">Выберите направление:</label>
+        <select id="directions" name="directions">
+            <option value="vertical">Вертикально</option>
+            <option value="horizontal">Горизонтально</option>
+        </select>
+        <br>
+
+        <input name="files" type="file" multiple>
+        <p>
+            <input type="submit" value="Send" />
+        </p>
+    </form>
+    {% if ready %}
+    <table>
+        <tr>
+            <td>
+                <img src="{{ image1 }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ image2 }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ image_result }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ image1_gist }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ image2_gist }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ image_result_gist }}">
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+</body>
+
+</html>
