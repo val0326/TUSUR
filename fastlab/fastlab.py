@@ -2,12 +2,14 @@ import hashlib
 import io
 from typing import List
 
+import cv2 as cv
 import fastapi.responses
 import numpy
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from matplotlib import pyplot as plt
 from PIL import Image, ImageDraw
 
 
@@ -23,6 +25,17 @@ def get_concat_v(im1, im2):
     dst.paste(im1, (0, 0))
     dst.paste(im2, (0, im1.height))
     return dst
+
+
+def make_histogram(im, filename):
+    img = cv.imread(im)
+    plt.figure()
+    color = ("r", "g", "b")
+    for i, col in enumerate(color):
+        histr = cv.calcHist([img], [i], None, [256], [0, 256])
+        plt.plot(histr, color=col)
+        plt.xlim([0, 256])
+        plt.savefig(f"./static/{filename}.jpg")
 
 
 app = FastAPI()
@@ -191,7 +204,11 @@ async def transform_images(
         image_result = get_concat_h(p_images[0], p_images[1])
     image_result.save("./static/result.jpg", "JPEG")
 
-    image_result.histogram("./static/result.jpg", "JPEG")
+    # image_result.histogram("./static/result.jpg", "JPEG")
+
+    make_histogram("./static/result.jpg", "image_result_gist")
+    make_histogram(images[0], "gist1")
+    make_histogram(images[1], "gist2")
 
     return templates.TemplateResponse(
         "transform.html",
@@ -201,8 +218,8 @@ async def transform_images(
             "image1": images[0],
             "image2": images[1],
             "image_result": "./static/result.jpg",
-            "image1_gist": "",
-            "image2_gist": "",
-            "image_result_gist": "",
+            "image1_gist": "./static/gist1.jpg",
+            "image2_gist": "./static/gist2.jpg",
+            "image_result_gist": "./static/image_result_gist.jpg",
         },
     )
