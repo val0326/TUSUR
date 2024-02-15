@@ -6,12 +6,14 @@ jobs:
     steps:
       - name: Begin
         uses: actions/checkout@v3
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v1
       - name: Echo hello
         run: echo "hello world"
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.10.12"
+          python-version: 3.10.12
       - name: Install pyenv
         run: pyenv local 3.10.12
       - name: Poetrylock
