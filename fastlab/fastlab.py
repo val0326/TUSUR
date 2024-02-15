@@ -41,6 +41,10 @@ def make_histogram(im, filename):
 app = FastAPI()
 
 
+def sum_two_args(x, y):
+    return x + y
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -206,9 +210,9 @@ async def transform_images(
 
     # image_result.histogram("./static/result.jpg", "JPEG")
 
-    make_histogram("./static/result.jpg", "image_result_gist")
-    make_histogram(images[0], "gist1")
-    make_histogram(images[1], "gist2")
+    make_histogram("./static/result.jpg", "image_result_hist")
+    make_histogram(images[0], "hist1")
+    make_histogram(images[1], "hist2")
 
     return templates.TemplateResponse(
         "transform.html",
@@ -218,8 +222,8 @@ async def transform_images(
             "image1": images[0],
             "image2": images[1],
             "image_result": "./static/result.jpg",
-            "image1_gist": "./static/gist1.jpg",
-            "image2_gist": "./static/gist2.jpg",
-            "image_result_gist": "./static/image_result_gist.jpg",
+            "image1_gist": "./static/hist1.jpg",
+            "image2_gist": "./static/hist2.jpg",
+            "image_result_gist": "./static/image_result_hist.jpg",
         },
     )
