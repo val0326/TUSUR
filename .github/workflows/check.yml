@@ -7,7 +7,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install deps
-        run: npm ci
+        run: poetry update
       - name: Lint
         run: npm run lint
   test:
