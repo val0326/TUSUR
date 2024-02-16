@@ -14,8 +14,8 @@ jobs:
         with:
           default: 3.10.12
       - name: install poetry
-        uses: Gr1N/setup-poetry@v8
+        run: poetry install
       - run: poetry --version
-      - run: poetry install pytest
+      - run: poetry add pytest
       - name: Run tests
         run: poetry run pytest my_tests.py
