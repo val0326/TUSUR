@@ -19,4 +19,4 @@ jobs:
       - run: poetry install --sync
       - run: poetry add pytest
       - name: Run tests
-        run: poetry run pytest my_tests.py
+        run: poetry run python -m pytest my_tests.py
