@@ -17,4 +17,4 @@ jobs:
       - run: poetry --version
       - run: poetry add pytest
       - name: Run tests
-        run: pytest .
+        run: poetry run python my_tests.py.
