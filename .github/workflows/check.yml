@@ -15,8 +15,6 @@ jobs:
           default: 3.10.12    
       - uses: Gr1N/setup-poetry@v8
       - run: poetry --version
-      - uses: dariocurr/pytest-summary@main
-        with:
-          extensions: pytest-asyncio pytest-cov
+      - run: poetry add pytest
       - name: Start tests
         run: poetry run python -m pytest my_tests.py
