@@ -12,8 +12,9 @@ jobs:
       - name: setup pyenv
         uses: "gabrielfalcao/pyenv-action@v18"
         with:
-          default: 3.10.12    
-      - uses: Gr1N/setup-poetry@v8
+          default: 3.10.12
+      - name: install poetry
+        uses: Gr1N/setup-poetry@v8
       - run: poetry --version
       - run: poetry add pytest
       - name: Run tests
