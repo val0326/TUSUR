@@ -1,4 +1,4 @@
-import fastlab
+from fastlab import fastlab
 
 
 def test1():
