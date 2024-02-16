@@ -16,6 +16,6 @@ jobs:
       - name: install poetry
         uses: Gr1N/setup-poetry@v8
       - run: poetry --version
-      - run: poetry add pytest
+      - run: poetry install pytest
       - name: Run tests
         run: poetry run pytest my_tests.py
