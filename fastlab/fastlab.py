@@ -1,5 +1,6 @@
 import hashlib
 import io
+from os.path import realpath
 from typing import List
 
 import cv2 as cv
@@ -50,7 +51,11 @@ def read_root():
     return {"Hello": "World"}
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=realpath(f"{realpath(__file__)}/../static")),
+    name="static",
+)
 templates = Jinja2Templates(directory="templates")
 
 
