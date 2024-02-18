@@ -208,8 +208,6 @@ async def transform_images(
         image_result = get_concat_h(p_images[0], p_images[1])
     image_result.save("./static/result.jpg", "JPEG")
 
-    # image_result.histogram("./static/result.jpg", "JPEG")
-
     make_histogram("./static/result.jpg", "image_result_hist")
     make_histogram(images[0], "hist1")
     make_histogram(images[1], "hist2")
