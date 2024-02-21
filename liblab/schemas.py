@@ -20,18 +20,17 @@ class Book(_BookBase):
         from_attributes = True
 
 
-class _UserBase(_pydantic.BaseModel):
+class _WriterBase(_pydantic.BaseModel):
     email: str
 
 
-class UserCreate(_UserBase):
+class WriterCreate(_WriterBase):
     password: str
 
 
-class User(_UserBase):
+class Writer(_WriterBase):
     id: int
-    is_active: bool
-    posts: List[Book] = []
+    books: List[Book] = []
 
     class Config:
         from_attributes = True

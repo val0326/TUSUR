@@ -11,53 +11,53 @@ app = _fastapi.FastAPI()
 _services.create_database()
 
 
-@app.post("/users/", response_model=_schemas.User)
-def create_user(
-    user: _schemas.UserCreate,
+@app.post("/writers/", response_model=_schemas.Writer)
+def create_writer(
+    writer: _schemas.WriterCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    db_user = _services.get_user_by_email(db=db, email=user.email)
-    if db_user:
+    db_writer = _services.get_writer_by_email(db=db, email=writer.email)
+    if db_writer:
         raise _fastapi.HTTPException(
             status_code=400, detail="woops the email is in use"
         )
-    return _services.create_user(db=db, user=user)
+    return _services.create_writer(db=db, writer=writer)
 
 
-@app.get("/users/", response_model=List[_schemas.User])
-def read_users(
+@app.get("/writers/", response_model=List[_schemas.Writer])
+def read_writers(
     skip: int = 0,
     limit: int = 10,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    users = _services.get_users(db=db, skip=skip, limit=limit)
-    return users
+    writers = _services.get_writers(db=db, skip=skip, limit=limit)
+    return writers
 
 
-@app.get("/users/{user_id}", response_model=_schemas.User)
-def read_user(
-    user_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
+@app.get("/writers/{writer_id}", response_model=_schemas.Writer)
+def read_writer(
+    writer_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    db_user = _services.get_user(db=db, user_id=user_id)
-    if db_user is None:
+    db_writer = _services.get_writer(db=db, writer_id=writer_id)
+    if db_writer is None:
         raise _fastapi.HTTPException(
-            status_code=404, detail="sorry this user does not exist"
+            status_code=404, detail="sorry this writer does not exist"
         )
-    return db_user
+    return db_writer
 
 
-@app.post("/users/{user_id}/books/", response_model=_schemas.Book)
+@app.post("/writers/{writer_id}/books/", response_model=_schemas.Book)
 def create_book(
-    user_id: int,
+    writer_id: int,
     book: _schemas.BookCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    db_user = _services.get_user(db=db, user_id=user_id)
-    if db_user is None:
+    db_writer = _services.get_writer(db=db, writer_id=writer_id)
+    if db_writer is None:
         raise _fastapi.HTTPException(
-            status_code=404, detail="sorry this user does not exist"
+            status_code=404, detail="sorry this writer does not exist"
         )
-    return _services.create_book(db=db, book=book, user_id=user_id)
+    return _services.create_book(db=db, book=book, writer_id=writer_id)
 
 
 @app.get("/books/", response_model=List[_schemas.Book])
@@ -90,12 +90,12 @@ def delete_book(
     return {"message": f"successfully deleted book with id: {book_id}"}
 
 
-@app.delete("/users/{user_id}")
-def delete_user(
-    user_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
+@app.delete("/writers/{writer_id}")
+def delete_writer(
+    writer_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    _services.delete_user(db=db, user_id=user_id)
-    return {"message": f"successfully deleted user with id: {user_id}"}
+    _services.delete_writer(db=db, writer_id=writer_id)
+    return {"message": f"successfully deleted writer with id: {writer_id}"}
 
 
 @app.put("/books/{book_id}", response_model=_schemas.Book)
