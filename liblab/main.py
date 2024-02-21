@@ -90,6 +90,14 @@ def delete_post(
     return {"message": f"successfully deleted post with id: {post_id}"}
 
 
+@app.delete("/users/{user_id}")
+def delete_user(
+    user_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
+):
+    _services.delete_user(db=db, user_id=user_id)
+    return {"message": f"successfully deleted user with id: {user_id}"}
+
+
 @app.put("/posts/{post_id}", response_model=_schemas.Post)
 def update_post(
     post_id: int,

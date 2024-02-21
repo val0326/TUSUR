@@ -62,6 +62,11 @@ def delete_post(db: _orm.Session, post_id: int):
     db.commit()
 
 
+def delete_user(db: _orm.Session, user_id: int):
+    db.query(_models.User).filter(_models.User.id == user_id).delete()
+    db.commit()
+
+
 def update_post(db: _orm.Session, post: _schemas.PostCreate, post_id: int):
     db_post = get_post(db=db, post_id=post_id)
     db_post.title = post.title
