@@ -1,5 +1,3 @@
-import datetime as _dt
-
 import database as _database
 import models as _models
 import schemas as _schemas
@@ -41,24 +39,24 @@ def get_user(db: _orm.Session, user_id: int):
     return db.query(_models.User).filter(_models.User.id == user_id).first()
 
 
-def create_post(db: _orm.Session, post: _schemas.PostCreate, user_id: int):
-    post = _models.Post(**post.dict(), owner_id=user_id)
-    db.add(post)
+def create_book(db: _orm.Session, book: _schemas.BookCreate, user_id: int):
+    book = _models.Book(**book.model_dump(), owner_id=user_id)
+    db.add(book)
     db.commit()
-    db.refresh(post)
-    return post
+    db.refresh(book)
+    return book
 
 
-def get_posts(db: _orm.Session, skip: int, limit: int):
-    return db.query(_models.Post).offset(skip).limit(limit).all()
+def get_books(db: _orm.Session, skip: int, limit: int):
+    return db.query(_models.Book).offset(skip).limit(limit).all()
 
 
-def get_post(db: _orm.Session, post_id: int):
-    return db.query(_models.Post).filter(_models.Post.id == post_id).first()
+def get_book(db: _orm.Session, book_id: int):
+    return db.query(_models.Book).filter(_models.Book.id == book_id).first()
 
 
-def delete_post(db: _orm.Session, post_id: int):
-    db.query(_models.Post).filter(_models.Post.id == post_id).delete()
+def delete_book(db: _orm.Session, book_id: int):
+    db.query(_models.Book).filter(_models.Book.id == book_id).delete()
     db.commit()
 
 
@@ -67,11 +65,11 @@ def delete_user(db: _orm.Session, user_id: int):
     db.commit()
 
 
-def update_post(db: _orm.Session, post: _schemas.PostCreate, post_id: int):
-    db_post = get_post(db=db, post_id=post_id)
-    db_post.title = post.title
-    db_post.content = post.content
-    db_post.date_last_updated = _dt.datetime.now()
+def update_book(db: _orm.Session, book: _schemas.BookCreate, book_id: int):
+    db_book = get_book(db=db, book_id=book_id)
+    db_book.title = book.title
+    db_book.content = book.content
+    # db_post.date_last_updated = _dt.datetime.now()
     db.commit()
-    db.refresh(db_post)
-    return db_post
+    db.refresh(db_book)
+    return db_book

@@ -46,10 +46,10 @@ def read_user(
     return db_user
 
 
-@app.post("/users/{user_id}/posts/", response_model=_schemas.Post)
-def create_post(
+@app.post("/users/{user_id}/books/", response_model=_schemas.Book)
+def create_book(
     user_id: int,
-    post: _schemas.PostCreate,
+    book: _schemas.BookCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     db_user = _services.get_user(db=db, user_id=user_id)
@@ -57,37 +57,37 @@ def create_post(
         raise _fastapi.HTTPException(
             status_code=404, detail="sorry this user does not exist"
         )
-    return _services.create_post(db=db, post=post, user_id=user_id)
+    return _services.create_book(db=db, book=book, user_id=user_id)
 
 
-@app.get("/posts/", response_model=List[_schemas.Post])
-def read_posts(
+@app.get("/books/", response_model=List[_schemas.Book])
+def read_books(
     skip: int = 0,
     limit: int = 10,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    posts = _services.get_posts(db=db, skip=skip, limit=limit)
-    return posts
+    books = _services.get_books(db=db, skip=skip, limit=limit)
+    return books
 
 
-@app.get("/posts/{post_id}", response_model=_schemas.Post)
-def read_post(
-    post_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
+@app.get("/books/{book_id}", response_model=_schemas.Book)
+def read_book(
+    book_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    post = _services.get_post(db=db, post_id=post_id)
-    if post is None:
+    book = _services.get_book(db=db, book_id=book_id)
+    if book is None:
         raise _fastapi.HTTPException(
-            status_code=404, detail="sorry this post does not exist"
+            status_code=404, detail="sorry this book does not exist"
         )
-    return post
+    return book
 
 
-@app.delete("/posts/{post_id}")
-def delete_post(
-    post_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
+@app.delete("/books/{book_id}")
+def delete_book(
+    book_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    _services.delete_post(db=db, post_id=post_id)
-    return {"message": f"successfully deleted post with id: {post_id}"}
+    _services.delete_book(db=db, book_id=book_id)
+    return {"message": f"successfully deleted book with id: {book_id}"}
 
 
 @app.delete("/users/{user_id}")
@@ -98,10 +98,10 @@ def delete_user(
     return {"message": f"successfully deleted user with id: {user_id}"}
 
 
-@app.put("/posts/{post_id}", response_model=_schemas.Post)
-def update_post(
-    post_id: int,
-    post: _schemas.PostCreate,
+@app.put("/books/{book_id}", response_model=_schemas.Book)
+def update_book(
+    book_id: int,
+    book: _schemas.BookCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    return _services.update_post(db=db, post=post, post_id=post_id)
+    return _services.update_book(db=db, book=book, book_id=book_id)

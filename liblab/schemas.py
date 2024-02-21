@@ -1,23 +1,20 @@
-import datetime as _dt
 from typing import List
 
 import pydantic as _pydantic
 
 
-class _PostBase(_pydantic.BaseModel):
+class _BookBase(_pydantic.BaseModel):
     title: str
     content: str
 
 
-class PostCreate(_PostBase):
+class BookCreate(_BookBase):
     pass
 
 
-class Post(_PostBase):
+class Book(_BookBase):
     id: int
     owner_id: int
-    date_created: _dt.datetime
-    date_last_updated: _dt.datetime
 
     class Config:
         from_attributes = True
@@ -34,7 +31,7 @@ class UserCreate(_UserBase):
 class User(_UserBase):
     id: int
     is_active: bool
-    posts: List[Post] = []
+    posts: List[Book] = []
 
     class Config:
         from_attributes = True
