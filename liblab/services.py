@@ -1,5 +1,3 @@
-import datetime as _dt
-
 import database as _database
 import models as _models
 import schemas as _schemas
@@ -22,9 +20,7 @@ def create_book(
     db: _orm.Session,
     book: _schemas.BookCreate,
 ):
-    book = _models.Book(
-        **book.model_dump(),
-    )
+    book = _models.Book(**book.model_dump())
     db.add(book)
     db.commit()
     db.refresh(book)
@@ -48,7 +44,6 @@ def update_book(db: _orm.Session, book: _schemas.BookCreate, book_id: int):
     db_book = get_book(db=db, book_id=book_id)
     db_book.title = book.title
     db_book.content = book.content
-    db_book.date_last_updated = _dt.datetime.now()
     db.commit()
     db.refresh(db_book)
     return db_book
