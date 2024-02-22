@@ -1,3 +1,4 @@
+import datetime as _dt
 from typing import List
 
 import pydantic as _pydantic
@@ -14,23 +15,9 @@ class BookCreate(_BookBase):
 
 class Book(_BookBase):
     id: int
-    owner_id: int
 
-    class Config:
-        from_attributes = True
-
-
-class _WriterBase(_pydantic.BaseModel):
-    email: str
-
-
-class WriterCreate(_WriterBase):
-    password: str
-
-
-class Writer(_WriterBase):
-    id: int
-    books: List[Book] = []
+    date_created: _dt.datetime
+    date_last_updated: _dt.datetime
 
     class Config:
         from_attributes = True

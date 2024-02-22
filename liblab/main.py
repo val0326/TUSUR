@@ -11,53 +11,12 @@ app = _fastapi.FastAPI()
 _services.create_database()
 
 
-@app.post("/writers/", response_model=_schemas.Writer)
-def create_writer(
-    writer: _schemas.WriterCreate,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-):
-    db_writer = _services.get_writer_by_email(db=db, email=writer.email)
-    if db_writer:
-        raise _fastapi.HTTPException(
-            status_code=400, detail="woops the email is in use"
-        )
-    return _services.create_writer(db=db, writer=writer)
-
-
-@app.get("/writers/", response_model=List[_schemas.Writer])
-def read_writers(
-    skip: int = 0,
-    limit: int = 10,
-    db: _orm.Session = _fastapi.Depends(_services.get_db),
-):
-    writers = _services.get_writers(db=db, skip=skip, limit=limit)
-    return writers
-
-
-@app.get("/writers/{writer_id}", response_model=_schemas.Writer)
-def read_writer(
-    writer_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
-):
-    db_writer = _services.get_writer(db=db, writer_id=writer_id)
-    if db_writer is None:
-        raise _fastapi.HTTPException(
-            status_code=404, detail="sorry this writer does not exist"
-        )
-    return db_writer
-
-
-@app.post("/writers/{writer_id}/books/", response_model=_schemas.Book)
+@app.post("/books/", response_model=_schemas.Book)
 def create_book(
-    writer_id: int,
     book: _schemas.BookCreate,
     db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
-    db_writer = _services.get_writer(db=db, writer_id=writer_id)
-    if db_writer is None:
-        raise _fastapi.HTTPException(
-            status_code=404, detail="sorry this writer does not exist"
-        )
-    return _services.create_book(db=db, book=book, writer_id=writer_id)
+    return _services.create_book(db=db, book=book)
 
 
 @app.get("/books/", response_model=List[_schemas.Book])
@@ -88,14 +47,6 @@ def delete_book(
 ):
     _services.delete_book(db=db, book_id=book_id)
     return {"message": f"successfully deleted book with id: {book_id}"}
-
-
-@app.delete("/writers/{writer_id}")
-def delete_writer(
-    writer_id: int, db: _orm.Session = _fastapi.Depends(_services.get_db)
-):
-    _services.delete_writer(db=db, writer_id=writer_id)
-    return {"message": f"successfully deleted writer with id: {writer_id}"}
 
 
 @app.put("/books/{book_id}", response_model=_schemas.Book)
